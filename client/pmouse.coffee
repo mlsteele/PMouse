@@ -30,7 +30,16 @@ $ ->
       nx: ev.clientX / $('.screen').width()
       ny: ev.clientY / $('.screen').height()
 
-  # # disable page scrolling
-  # _.each ['touchstart', 'touchmove'], (evn) ->
-  #   _.each [document, document.body], (thing) ->
-  #     thing.addEventListener evn, (e) -> e.preventDefault()
+  # disable page scrolling
+  _.each ['touchstart', 'touchmove'], (evn) ->
+    _.each [document, document.body], (thing) ->
+      thing.addEventListener evn, (e) -> e.preventDefault()
+
+  $('.screen').bind 'touchmove', (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    touch = e.originalEvent.targetTouches[0]
+
+    upload_move_cmd
+      nx: touch.clientX / $('.screen').width()
+      ny: touch.clientY / $('.screen').height()
