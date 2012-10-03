@@ -1,0 +1,123 @@
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+  box-shadow: @arguments;
+  -moz-box-shadow: @arguments;
+  -webkit-box-shadow: @arguments;
+}
+.rounded-corners (@radius: 5px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+.circle (@radius: 20px) {
+  width: @radius * 2;
+  height: @radius * 2;
+  .rounded-corners(@radius);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  @color-black: #000;
+  @color-dark: #463F3F;
+  @color-blue: #A395CE;
+  @color-blue-light: #C0B8D8;
+  @color-green-dark: #4A9759;
+
+  .devbox {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    width: 600px;
+    height: 100px;
+    padding: 0 20px 0 20px;
+    z-index: 1000;
+
+    background-color: #C4C8D8;
+    font-family: 'Courier New', Courier;
+    font-size: 9pt;
+    line-height: 16pt;
+  }
+
+  .g-entity {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    .circle(50px);
+    background: @color-blue;
+
+    &.enemy-hand {
+      z-index: 50;
+
+      &.solved {
+        background-color: @color-green-dark;
+      }
+    }
+
+    &.client-hand {
+      .circle(70px);
+      z-index: 30;
+
+      &.open {
+        .circle(75px);
+        margin: -5px;
+        background: @color-blue-light;
+      }
+
+      &.touching {
+        .box-shadow(0, 0, 50px, #fff);
+      }
+
+      &.solved {
+        background-color: @color-green-dark;
+      }
+    }
+
+    &.card {
+      z-index: 40;
+
+      line-height: 90px;
+      color: #fff;
+      font-size: 50px;
+      text-align: center;
+      background: @color-blue;
+      .box-shadow(0, 0, 20px, rgba(0,0,0,0.5));
+      font-family: "Cochin-Bold";
+
+      &.touch-draggable-dragging {
+        .box-shadow(0, 0, 30px, #fff);
+        .circle(60px);
+        margin: -10px;
+        line-height: 108px;
+      }
+
+      &.tabled {
+        background: #f00;
+      }
+
+      &.claimed {
+        background: #FF9100;
+      }
+    }
+  }
+
+  .row {
+    width: 100%;
+    height: 50px;
+    background: #f00;
+
+    .row-mix(@h, @color) {
+      height: @h;
+      background: @color;
+    }
+
+    &#row1 {.row-mix(20%, @color-dark)}
+    &#row2 {.row-mix(30%, @color-black)}
+    &#row3 {.row-mix(0%, @color-dark)}
+    &#row4 {.row-mix(50%, @color-dark)}
+  }
+}

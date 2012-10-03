@@ -11,6 +11,7 @@ MOVE_CMD = 58
 class MouseSocket(tornado.websocket.WebSocketHandler):
   def open(self):
     print "MouseSocket opened."
+    # self.allow_draft76()
 
   # messages of format [CMDID, args...]
   # [MOVE_CMD, nx, ny] where x and y are normalized screen coordinates
