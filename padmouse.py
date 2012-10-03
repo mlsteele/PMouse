@@ -9,7 +9,15 @@ def clickMouse(x, y, button):
   CGPostMouseEvent((x, y), 1, button, 1)
   CGPostMouseEvent((x, y), 1, button, 0)
 
+# def moveMouse(x, y):
+#   bndl = objc.loadBundle('CoreGraphics', globals(), '/System/Library/Frameworks/ApplicationServices.framework')
+#   objc.loadBundleFunctions(bndl, globals(), [('CGWarpMouseCursorPosition', 'v{CGPoint=ff}')])
+#   CGWarpMouseCursorPosition((float(x), float(y)))
+
 def moveMouse(x, y):
   bndl = objc.loadBundle('CoreGraphics', globals(), '/System/Library/Frameworks/ApplicationServices.framework')
-  objc.loadBundleFunctions(bndl, globals(), [('CGWarpMouseCursorPosition', 'v{CGPoint=ff}')])
-  CGWarpMouseCursorPosition((x, y))
+  objc.loadBundleFunctions(bndl, globals(), [('CGEventCreateMouseEvent', 'v{CGPoint=ff}')])
+  move = CGEventCreateMouseEvent(None, kCGEventMouseMoved, (float(x), float(y)), 0)
+  CGEventPost(kCGHIDEventTap, move)
+
+moveMouse(4, 4.3)
