@@ -17,16 +17,20 @@ $ ->
   ws.onmessage = (ev) ->
     log 'Websocket message received: ' + ev.data
 
-  upload_move_cmd = (x, y) ->
+  upload_move_cmd = ({nx, ny}) ->
     log 'sending move cmd'
-    ws.send JSON.stringify(
+    ws.send JSON.stringify
       cmd_id: MOVE_CMD
-      nx: x
-      ny: y
-    )
+      nx: nx
+      ny: ny
 
+  # setup interaction
   $('.screen').click (ev) ->
-    upload_move_cmd(
-      ev.clientX / $('.screen').width(),
-      ev.clientY / $('.screen').height()
-    )
+    upload_move_cmd
+      nx: ev.clientX / $('.screen').width()
+      ny: ev.clientY / $('.screen').height()
+
+  # # disable page scrolling
+  # _.each ['touchstart', 'touchmove'], (evn) ->
+  #   _.each [document, document.body], (thing) ->
+  #     thing.addEventListener evn, (e) -> e.preventDefault()
