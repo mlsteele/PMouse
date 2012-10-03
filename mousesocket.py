@@ -7,6 +7,7 @@ import json
 
 mouse = pymouse.PyMouse()
 MOVE_CMD = 58
+CLICK_CMD = 59
 
 class MouseSocket(tornado.websocket.WebSocketHandler):
   # support Apple
@@ -23,11 +24,16 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
     print "MouseSocket received message"
     msg = json.loads(raw_message)
     print msg
+
     if msg['cmd_id'] is MOVE_CMD:
       print "CMDID: MOVE"
       w, h = mouse.screen_size()
       nx, ny = msg['nx'], msg['ny']
-      mouse.move(nx * w, ny * h)
+      mouse.move(nx * w - 1, ny * h - 1)
+
+    if msg['cmd_id'] is CLICK_CMD:
+      print 'CMDID: CLICK'
+      mouse.click(mouse.position()[0], mouse.position()[1], 1)
 
   def on_close(self):
     print "WebSocket closed"
