@@ -9,6 +9,10 @@ mouse = pymouse.PyMouse()
 MOVE_CMD = 58
 
 class MouseSocket(tornado.websocket.WebSocketHandler):
+  # support Apple
+  def allow_draft76(self):
+    return True
+
   def open(self):
     print "MouseSocket opened."
     # self.allow_draft76()
