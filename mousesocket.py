@@ -29,7 +29,7 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
       print "CMDID: MOVE"
       w, h = mouse.screen_size()
       nx, ny = msg['nx'], msg['ny']
-      mouse.move(nx * w - 1, ny * h - 1)
+      mouse.move(nx * (w - 1), ny * (h - 1))
 
     if msg['cmd_id'] is CLICK_CMD:
       print 'CMDID: CLICK'

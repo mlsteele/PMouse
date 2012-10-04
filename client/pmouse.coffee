@@ -16,6 +16,9 @@ $ ->
     $('.screen').removeClass('open').addClass('closed')
     log 'Websocket closed.'
 
+    # reload to re-establish connection (FIXME)
+    window.location = window.location
+
   ws.onmessage = (ev) ->
     log 'Websocket message received: ' + ev.data
 
@@ -31,8 +34,10 @@ $ ->
     ws.send JSON.stringify cmd_id: CLICK_CMD
 
   extract_n_pos = (pos_holder) ->
-    nx: pos_holder.clientX / $('.screen').width()
-    ny: pos_holder.clientY / $('.screen').height()
+    to1 = (n) -> Math.max(0, Math.min(n, 1))
+    $sc = $('.screen')
+    nx: to1 (pos_holder.clientX - $sc.position().left) / $sc.width()
+    ny: to1 (pos_holder.clientY - $sc.position().top)  / $sc.height()
 
   # setup interaction
   $('.screen').click (ev) ->
@@ -43,7 +48,7 @@ $ ->
     _.each [document, document.body], (thing) ->
       thing.addEventListener evn, (e) -> e.preventDefault()
 
-  $('.screen').bind 'touchmove', (ev) ->
+  $('body').bind 'touchmove', (ev) ->
     ev.preventDefault()
     ev.stopPropagation()
     touch = ev.originalEvent.targetTouches[0]
