@@ -5,9 +5,14 @@ import tornado.ioloop
 import tornado.web
 import json
 
-mouse = pymouse.PyMouse()
-MOVE_CMD = 58
-CLICK_CMD = 59
+class StateMouse(pymouse.PyMouse):
+  def __init__(self):
+    super(StateMouse, self).__init__()
+    self.btn_state = 0
+
+mouse = StateMouse()
+# FIXME: this is a guess subject to interference
+# 0 - off, 1 - Lbutton, 2 - Rbutton
 
 class MouseSocket(tornado.websocket.WebSocketHandler):
   # support Apple
@@ -18,22 +23,40 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
     print "MouseSocket opened."
     # self.allow_draft76()
 
-  # messages of format [CMDID, args...]
+  # messages of format json {cmd: 'NAME', key->vals...}
   # [MOVE_CMD, nx, ny] where x and y are normalized screen coordinates
   def on_message(self, raw_message):
     print "MouseSocket received message"
     msg = json.loads(raw_message)
     print msg
 
-    if msg['cmd_id'] is MOVE_CMD:
-      print "CMDID: MOVE"
+    if msg['cmd'] == 'MOVE':
+      print "CMD: MOVE"
       w, h = mouse.screen_size()
       nx, ny = msg['nx'], msg['ny']
       mouse.move(nx * (w - 1), ny * (h - 1))
 
-    if msg['cmd_id'] is CLICK_CMD:
-      print 'CMDID: CLICK'
-      mouse.click(mouse.position()[0], mouse.position()[1], 1)
+    if msg['cmd'] == 'CLICK':
+      print mouse.btn_state
+      print 'CMD: CLICK'
+      nt = msg['n_touches']
+      if nt <= 1:
+        # print 'be unclicked'
+        mouse.release(mouse.position()[0], mouse.position()[1], 1)
+        mouse.release(mouse.position()[0], mouse.position()[1], 2)
+        mouse.btn_state = 0
+      elif nt == 2:
+        # print 'be clicked'
+        if mouse.btn_state == 0:
+          mouse.release(mouse.position()[0], mouse.position()[1], 2)
+          mouse.press(mouse.position()[0], mouse.position()[1], 1)
+          mouse.btn_state = 1
+      else:
+        # print 'be right clicked'
+        if mouse.btn_state != 2:
+          mouse.release(mouse.position()[0], mouse.position()[1], 1)
+          mouse.press(mouse.position()[0], mouse.position()[1], 2)
+          mouse.btn_state = 2
 
   def on_close(self):
     print "WebSocket closed"
