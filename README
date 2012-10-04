@@ -1,5 +1,10 @@
+PMouse
+Enables the use of touch devices as tablets for computers.
+
 Dependencie:
 
-python 2.7
-py27-pobjc (macports)
-py27-pobjc-quartz (macports)
+python (2.6)
+node.js -> coffeescript -> zappa for static server
+
+This has only been tested with OSX 10.6 and an old iPad.
+In the real of the theoretical, it should 'just work' with any OS and touch enabled web device.
