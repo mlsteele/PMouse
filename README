@@ -21,5 +21,9 @@ one finger - move mouse
 second finger touch - left mouse button
 third finger touch - right mouse button
 
+Security:
+None to speak of.
+If your mouse starts moving of its own volition, close the laptop and reopen in a network free zone (microwave?) to terminate the python server.
+
 This has only been tested with OSX 10.6 and an old iPad.
 In the real of the theoretical, it should 'just work' with any OS and touch enabled web device.
