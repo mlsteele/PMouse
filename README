@@ -1,10 +1,25 @@
 PMouse
 Enables the use of touch devices as tablets for computers.
 
-Dependencie:
-
+Dependencies:
 python (2.6)
 node.js -> coffeescript -> zappa for static server
+
+To Run:
+If running on a mac, be sure to use the built in python (/usr/bin/python) for system event support
+$ py26 mousesocket.py
+$ coffee client/static_server.coffee
+On your tablet visit CO.MPU.TER.IP:5003
+
+On the tablet the color of the background indicates network state:
+grey - waiting
+red - failed socket
+green - happy
+
+Gestures:
+one finger - move mouse
+second finger touch - left mouse button
+third finger touch - right mouse button
 
 This has only been tested with OSX 10.6 and an old iPad.
 In the real of the theoretical, it should 'just work' with any OS and touch enabled web device.
