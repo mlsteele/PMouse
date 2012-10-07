@@ -48,7 +48,6 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
       elif nt == 2:
         # print 'be clicked'
         if mouse.btn_state == 0:
-          mouse.release(mouse.position()[0], mouse.position()[1], 2)
           mouse.press(mouse.position()[0], mouse.position()[1], 1)
           mouse.btn_state = 1
       else:
