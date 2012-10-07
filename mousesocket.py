@@ -11,8 +11,10 @@ class StateMouse(pymouse.PyMouse):
     self.btn_state = 0
 
 mouse = StateMouse()
-# FIXME: this is a guess subject to interference
-# 0 - off, 1 - Lbutton, 2 - Rbutton
+
+def auth_ip(ip):
+  ip_whitelist = ['127.0.0.1', 'localhost']
+  return ip in ip_whitelist
 
 class MouseSocket(tornado.websocket.WebSocketHandler):
   # support Apple
@@ -20,8 +22,9 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
     return True
 
   def open(self):
-    print "MouseSocket opened."
-    # self.allow_draft76()
+    print "MouseSocket opened. to %s" % self.request.remote_ip
+    if not auth_ip(self.request.remote_ip):
+      raise Exception("bad auth")
 
   # messages of format json {cmd: 'NAME', key->vals...}
   # [MOVE_CMD, nx, ny] where x and y are normalized screen coordinates
