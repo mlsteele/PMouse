@@ -64,6 +64,7 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
 app = tornado.web.Application([(r'/ws', MouseSocket)])
 
 if __name__ == "__main__":
+  print "starting mouse server"
   http_server = tornado.httpserver.HTTPServer(app)
   http_server.listen(8888)
   tornado.ioloop.IOLoop.instance().start()
