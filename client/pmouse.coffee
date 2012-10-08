@@ -7,6 +7,7 @@ $ ->
     enabled: false
     # false, 'p' for pixel, or 'n' for normalized
     track_delta_mode: 'p'
+    track_delta_scale: 1.2
   MC = # motion cache (arbitrary data store)
     last_main_touch_pos_n: undefined
     last_main_touch_pos_p: undefined
@@ -49,7 +50,7 @@ $ ->
         dnx: dnx
         dny: dny
 
-    move_delta_p: ({dpx, dpy}, scale=1) ->
+    move_delta_p: ({dpx, dpy}, scale=IS.track_delta_scale) ->
       WS.send JSON.stringify
         cmd: 'MOVE-DELTA-P'
         dpx: dpx * scale
