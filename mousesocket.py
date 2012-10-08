@@ -35,32 +35,46 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
     msg = json.loads(raw_message)
     print msg
 
-    if msg['cmd'] == 'MOVE':
-      print "CMD: MOVE"
+    if msg['cmd'] == 'MOVE-ABS':
+      print "CMD: MOVE-ABS"
       w, h = mouse.screen_size()
       nx, ny = msg['nx'], msg['ny']
       mouse.move(nx * (w - 1), ny * (h - 1))
 
-    if msg['cmd'] == 'CLICK':
+    elif msg['cmd'] == 'MOVE-DELTA':
+      print "CMD: MOVE-DELTA"
+      w, h = mouse.screen_size()
+      dnx, dny = msg['dnx'], msg['dny']
+      dpx, dpy = dnx * (w - 1), dny * (h - 1)
+      cmx, cmy = mouse.position()
+      bind_to_screen = lambda x, y: (min(max(0, x), w-1), min(max(0, y), h-1))
+      nx, ny = bind_to_screen(cmx + dpx, cmy + dpy)
+      mouse.move(nx, ny)
+
+    elif msg['cmd'] == 'CLICK':
       print mouse.btn_state
       print 'CMD: CLICK'
       nt = msg['n_touches']
+      cmx, cmy = mouse.position()
       if nt <= 1:
         # print 'be unclicked'
-        mouse.release(mouse.position()[0], mouse.position()[1], 1)
-        mouse.release(mouse.position()[0], mouse.position()[1], 2)
+        mouse.release(cmx, cmy, 1)
+        mouse.release(cmx, cmy, 2)
         mouse.btn_state = 0
       elif nt == 2:
         # print 'be clicked'
         if mouse.btn_state == 0:
-          mouse.press(mouse.position()[0], mouse.position()[1], 1)
+          mouse.press(cmx, cmy, 1)
           mouse.btn_state = 1
       else:
         # print 'be right clicked'
         if mouse.btn_state != 2:
-          mouse.release(mouse.position()[0], mouse.position()[1], 1)
-          mouse.press(mouse.position()[0], mouse.position()[1], 2)
+          mouse.release(cmx, cmy, 1)
+          mouse.press(cmx, cmy, 2)
           mouse.btn_state = 2
+
+    elif msg['cmd'] == 'LOG':
+      print msg
 
   def on_close(self):
     print "WebSocket closed"
