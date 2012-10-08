@@ -46,8 +46,6 @@ $ ->
     SRV.move extract_n_pos ev
 
   $('body').bind 'touchmove', (ev) ->
-    ev.preventDefault()
-    ev.stopPropagation()
     SRV.move extract_n_pos ev.originalEvent.targetTouches[0]
 
   $('body').bind 'touchstart touchend touchcancel', (ev) ->
