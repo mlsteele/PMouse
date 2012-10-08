@@ -15,7 +15,7 @@ $ ->
     log 'Websocket closed.'
 
     # reload to re-establish connection (FIXME)
-    window.location = window.location
+    setTimeout((-> window.location = window.location), 4000)
 
   ws.onmessage = (ev) ->
     log 'Websocket message received: ' + ev.data
