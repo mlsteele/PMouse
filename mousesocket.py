@@ -41,11 +41,20 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
       nx, ny = msg['nx'], msg['ny']
       mouse.move(nx * (w - 1), ny * (h - 1))
 
-    elif msg['cmd'] == 'MOVE-DELTA':
+    elif msg['cmd'] == 'MOVE-DELTA-N':
       print "CMD: MOVE-DELTA"
       w, h = mouse.screen_size()
       dnx, dny = msg['dnx'], msg['dny']
       dpx, dpy = dnx * (w - 1), dny * (h - 1)
+      cmx, cmy = mouse.position()
+      bind_to_screen = lambda x, y: (min(max(0, x), w-1), min(max(0, y), h-1))
+      nx, ny = bind_to_screen(cmx + dpx, cmy + dpy)
+      mouse.move(nx, ny)
+
+    elif msg['cmd'] == 'MOVE-DELTA-P':
+      print "CMD: MOVE-DELTA-P"
+      w, h = mouse.screen_size()
+      dpx, dpy = msg['dpx'], msg['dpy']
       cmx, cmy = mouse.position()
       bind_to_screen = lambda x, y: (min(max(0, x), w-1), min(max(0, y), h-1))
       nx, ny = bind_to_screen(cmx + dpx, cmy + dpy)
