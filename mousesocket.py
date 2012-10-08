@@ -13,8 +13,9 @@ class StateMouse(pymouse.PyMouse):
 mouse = StateMouse()
 
 def auth_ip(ip):
-  ip_whitelist = ['127.0.0.1', 'localhost']
-  return ip in ip_whitelist
+  ip_whitelist = ['127.0.0.1', 'localhost', '10.0.1.12', '10.0.1.13']
+  # return ip in ip_whitelist
+  return True
 
 class MouseSocket(tornado.websocket.WebSocketHandler):
   # support Apple
@@ -23,6 +24,7 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
 
   def open(self):
     print "MouseSocket opened. to %s" % self.request.remote_ip
+    print self.request
     if not auth_ip(self.request.remote_ip):
       raise Exception("bad auth")
 
@@ -62,7 +64,6 @@ class MouseSocket(tornado.websocket.WebSocketHandler):
 
   def on_close(self):
     print "WebSocket closed"
-
 
 app = tornado.web.Application([(r'/ws', MouseSocket)])
 
